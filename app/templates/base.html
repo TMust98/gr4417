@@ -10,8 +10,13 @@
 </head>
 <body>
   <div>
-    <a href="{{ url_for('index') }}">Главная страница</a>
-    <a href="{{ url_for('login') }}">Вход</a>
+      <a href="{{ url_for('index') }}">Главная страница</a>
+      {% if current_user.is_anonymous%}
+        <a href="{{ url_for('login') }}">Вход</a>
+        <a href="{{ url_for('register') }}">Регистрация</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">Выход</a>
+      {% endif %}
   </div>
   {% with messages = get_flashed_messages() %}
   {% if messages %}

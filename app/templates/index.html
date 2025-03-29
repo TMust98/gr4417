@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-<h1>Hello {{ username }}</h1>
-{{ id }}
+{% if current_user.is_anonymous %}
+    <h1>Добро пожаловать! Регистрация по <a href="{{ url_for('register') }}">ссылке</a></h1>
+{% else %}
+    <h1>Текущий пользователь {{ current_user.username }}</h1>
+{% endif %}
 {% endblock %}
