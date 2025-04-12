@@ -1,9 +1,10 @@
 from app import app
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app import db
 from app.models import User
+from datetime import datetime
 
 
 @app.route("/")
@@ -13,10 +14,9 @@ def index():
 
 
 @app.route("/second")
-@login_required
 def second():
-    text = f"Пользователь {current_user.username}"
-    return render_template("second.html", text=text)
+    abort(500)
+    return render_template("second.html")
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -51,6 +51,20 @@ def login():
         flash('Успешный вход в систему!')
         return redirect(next_page)
     return render_template("login.html", title='Вход', form=form)
+
+
+@app.route('/lk/<username>', methods=['GET', 'POST'])
+@login_required
+def lk(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now()
+        db.session.commit()
 
 
 @app.route('/logout')

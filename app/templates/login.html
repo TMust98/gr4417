@@ -6,14 +6,14 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
-            {{ form.username(size=32) }}
+            {{ form.username(class_="form-control", size=32, style="width:20%") }}
             {% for error in form.username.errors %}
                 <span style="color:red">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
+            {{ form.password(class_="form-control", size=32) }}
             {% for error in form.password.errors %}
                 <span style="color:red">[{{ error }}]</span>
             {% endfor %}
@@ -22,7 +22,7 @@
             {{ form.remember_me.label }} {{ form.remember_me() }}
         </p>
         <p>
-            {{ form.submit() }}
+            {{ form.submit(class_="btn btn-secondary") }}
         </p>
     </form>
 

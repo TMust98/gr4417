@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Личный кабинет пользователя: {{ user.username }}</h1>
+    <p>Время последнего посещения: {{ user.last_seen.strftime("%d.%m.%Y %H:%M") }}</p>
+{% endblock %}

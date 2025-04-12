@@ -1,35 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% block head %}
     <meta charset="UTF-8">
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+
+
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
         <title>MyApp</title>
     {% endif %}
+    {% endblock %}
 </head>
-<body>
-  <div>
-      <a href="{{ url_for('index') }}">Главная страница</a>
-      {% if current_user.is_anonymous%}
-        <a href="{{ url_for('login') }}">Вход</a>
-        <a href="{{ url_for('register') }}">Регистрация</a>
-      {% else %}
-        <a href="{{ url_for('logout') }}">Выход</a>
-      {% endif %}
-  </div>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-        <li>
-            {{ message }}
-        </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% endwith %}
 
-  {% block app_content %}{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('index') }}">MyApp</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    {% if current_user.is_anonymous %}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Главная</a>
+            </li>
+        </ul>
+      <ul class="navbar-nav my-2 my-md-0 mr-md-3">
+          <a href="{{ url_for('login') }}">Вход</a>
+          <a href="{{ url_for('register') }}">Регистрация</a>
+      </ul>
+    {% else %}
+      <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Главная</a>
+          </li>
+    </ul>
+      <ul class="navbar-nav my-2 my-md-0 mr-md-3">
+        <a href="{{ url_for('lk', username=current_user.username) }}">Профиль</a>
+        <a href="{{ url_for('logout') }}">Выход</a>
+      </ul>
+    {% endif %}
+    </div>
+</nav>
+{% endblock %}
+
+
+<body>
+<div class="container"
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+            <li>
+                <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+        {% block app_content %}{% endblock %}
+        {% block scripts %}
+            <!-- Optional JavaScript -->
+            {{ bootstrap.load_js() }}
+        {% endblock %}
+</div>
 </body>
 </html>
